@@ -33,7 +33,7 @@ class Maybe {
   }
 
   orElse(defaultValue) {
-    return this.isNoghing()
+    return this.isNothing()
       ? Maybe.of(defaultValue)
       : this;
   }

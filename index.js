@@ -33,9 +33,14 @@ class Maybe {
   }
 
   orElse(fn) {
-    return this.isNothing()
-      ? Maybe.of(fn(this.__error))
-      : this;
+    if (this.isNothing()) {
+      try {
+        return Maybe.of(fn(this.__error));
+      } catch (error) {
+        return Maybe.of(null, error);
+      }
+    }
+    return this;
   }
 
   ap(m2) {

@@ -1,10 +1,11 @@
 class Maybe {
-  constructor(value) {
+  constructor(value, error = null) {
     this.__value = value;
+    this.__error = error;
   }
 
-  static of(value) {
-    return new Maybe(value);
+  static of(value, error) {
+    return new Maybe(value, error);
   }
 
   isNothing() {
@@ -13,14 +14,13 @@ class Maybe {
 
   map(fn) {
     if (this.isNothing()) {
-      return Maybe.of(null);
+      return Maybe.of(null, this.__error);
     }
 
     try {
       return Maybe.of(fn(this.__value));
     } catch (error) {
-      console.error(error);
-      return Maybe.of(null);
+      return Maybe.of(null, error);
     }
   }
 
@@ -32,9 +32,9 @@ class Maybe {
     return this.map(f).join();
   }
 
-  orElse(defaultValue) {
+  orElse(fn) {
     return this.isNothing()
-      ? Maybe.of(defaultValue)
+      ? Maybe.of(fn(this.__error))
       : this;
   }
 
